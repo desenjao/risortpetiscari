@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Risorte Petiscaria - Delivery</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <!-- Loading Screen -->
+        <div id="loadingScreen" class="loading-screen">
+            <div class="loading-content">
+                <div class="loading-logo">
+                    <i class="fas fa-utensils"></i>
+                </div>
+                <h2>Risorte Petiscaria</h2>
+                <div class="loading-spinner"></div>
+                <p>Carregando delícias...</p>
+            </div>
+        </div>
+
+        <!-- Header -->
+        <header>
+            <div class="logo">
+                <i class="fas fa-utensils logo-icon"></i>
+                <h1>Risorte</h1>
+            </div>
+            <div class="user-actions">
+                <div class="cart-icon-wrapper" id="cartIcon">
+                    <i class="fas fa-shopping-cart"></i>
+                    <span class="cart-count">0</span>
+                </div>
+            </div>
+        </header>
+
+        <!-- Home Screen -->
+        <div id="homeScreen" class="screen active">
+            <!-- Banner Promocional -->
+            <div class="promo-banner">
+                <div class="promo-content">
+                    <h2>🔥 Ofertas Especiais</h2>
+                    <p>Aproveite nossos combos com desconto!</p>
+                </div>
+            </div>
+
+            <!-- Categorias -->
+            <div class="categories-section">
+                <h3 class="section-title">Categorias</h3>
+                <div class="categories">
+                    <div class="category active" data-category="all">
+                        <i class="fas fa-th"></i>
+                        <span>Todos</span>
+                    </div>
+                    <div class="category" data-category="porcoes">
+                        <i class="fas fa-drumstick-bite"></i>
+                        <span>Porções</span>
+                    </div>
+                    <div class="category" data-category="combos">
+                        <i class="fas fa-box"></i>
+                        <span>Combos</span>
+                    </div>
+                    <div class="category" data-category="bebidas">
+                        <i class="fas fa-glass-cheers"></i>
+                        <span>Bebidas</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Produtos em Promoção -->
+            <div class="products-section">
+                <h3 class="section-title">
+                    <i class="fas fa-fire"></i> Em Promoção
+                </h3>
+                <div id="promotionProducts" class="products-grid"></div>
+            </div>
+
+            <!-- Produtos Populares -->
+            <div class="products-section">
+                <h3 class="section-title">
+                    <i class="fas fa-star"></i> Mais Pedidos
+                </h3>
+                <div id="popularProducts" class="products-grid"></div>
+            </div>
+
+            <!-- Todos os Produtos -->
+            <div class="products-section">
+                <h3 class="section-title">Cardápio Completo</h3>
+                <div id="allProducts" class="products-grid"></div>
+            </div>
+        </div>
+
+        <!-- Cart Panel -->
+        <div id="cartPanel" class="cart-panel">
+            <div class="cart-header">
+                <h3><i class="fas fa-shopping-cart"></i> Seu Carrinho</h3>
+                <button id="closeCart" class="close-cart">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+
+            <div class="delivery-options">
+                <button id="deliveryOption" class="delivery-btn active">
+                    <i class="fas fa-motorcycle"></i> Delivery
+                </button>
+                <button id="pickupOption" class="delivery-btn">
+                    <i class="fas fa-store"></i> Retirada
+                </button>
+            </div>
+
+            <div id="cartItems" class="cart-items"></div>
+
+            <div class="cart-footer">
+                <div class="cart-total">
+                    <span>Total:</span>
+                    <span id="cartTotal">R$ 0,00</span>
+                </div>
+                <button id="checkoutBtn" class="checkout-btn">
+                    <i class="fas fa-check-circle"></i> Finalizar Pedido
+                </button>
+            </div>
+        </div>
+
+        <!-- Floating Cart Button (Mobile) -->
+        <div id="floatingCart" class="floating-cart-btn">
+            <i class="fas fa-shopping-cart"></i>
+            <span class="floating-cart-count">0</span>
+        </div>
+
+        <!-- Bottom Navigation -->
+        <nav class="bottom-nav">
+            <div class="nav-item active" data-screen="homeScreen">
+                <i class="fas fa-home"></i>
+                <span>Início</span>
+            </div>
+            <div class="nav-item" data-screen="ordersScreen">
+                <i class="fas fa-receipt"></i>
+                <span>Pedidos</span>
+            </div>
+            <div class="nav-item" data-screen="profileScreen">
+                <i class="fas fa-user"></i>
+                <span>Perfil</span>
+            </div>
+        </nav>
+
+        <!-- Orders Screen -->
+        <div id="ordersScreen" class="screen">
+            <div class="screen-header">
+                <h2><i class="fas fa-receipt"></i> Meus Pedidos</h2>
+            </div>
+            <div id="ordersList" class="orders-list"></div>
+        </div>
+
+        <!-- Profile Screen -->
+        <div id="profileScreen" class="screen">
+            <div class="screen-header">
+                <h2><i class="fas fa-user"></i> Meu Perfil</h2>
+            </div>
+            <div class="profile-content">
+                <div class="profile-avatar">
+                    <i class="fas fa-user-circle"></i>
+                </div>
+                <h3 id="userName">Carregando...</h3>
+                <p id="userEmail">email@exemplo.com</p>
+                
+                <div class="profile-info">
+                    <div class="info-item">
+                        <i class="fas fa-phone"></i>
+                        <span id="userPhone">Carregando...</span>
+                    </div>
+                    <div class="info-item">
+                        <i class="fas fa-map-marker-alt"></i>
+                        <span id="userAddress">Carregando...</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Animação de Produto Voando -->
+    <div id="flyingProduct" class="flying-product"></div>
+
+    <script src="app.js"></script>
+</body>
+</html>

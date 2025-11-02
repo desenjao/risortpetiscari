@@ -1,0 +1,545 @@
+{
+  "config": {
+    "nome_estabelecimento": "Risorte Petiscaria",
+    "telefone_whatsapp": "+558998120214",
+    "taxa_entrega": 5.00,
+    "tempo_entrega_min": 30,
+    "tempo_entrega_max": 45,
+    "horario_funcionamento": {
+      "segunda_sex": "18:00 - 23:00",
+      "sabado": "18:00 - 00:00",
+      "domingo": "18:00 - 22:00"
+    },
+    "endereco": {
+      "rua": "R. Trinta e Nove, 234",
+      "bairro": "Aldeia",
+      "cidade": "São Raimundo Nonato-PI",
+      "cep": "64793-000"
+    }
+  },
+  "user": {
+    "id": 1,
+    "nome": "João Pereira",
+    "email": "joao.silva@email.com",
+    "telefone": "+5511999999999",
+    "endereco": {
+      "rua": "Rua Oscar Barroso",
+      "bairro": "Aeroporto",
+      "cidade": "São Raimundo Nonato-PI",
+      "cep": "64793-000",
+      "complemento": "casa 13"
+    },
+    "favoritos": [1, 3, 7],
+    "ultimo_pedido": "2024-01-15"
+  },
+  "produtos": {
+    "porcoes": [
+      {
+        "id": 1,
+        "nome": "Porção de Coxinhas",
+        "descricao": "Deliciosas coxinhas de frango crocantes",
+        "preco": 25.90,
+        "preco_promocional": 22.90,
+        "imagem": "https://swiftbr.vteximg.com.br/arquivos/ids/208897-768-768/617666-coxinha-de-frango-mandioca-pre-frita_rec.jpg?v=638875872661630000",
+        "categoria": "porcoes",
+        "promocao": true,
+        "personalizavel": true,
+        "disponivel": true,
+        "avaliacao": 4.8,
+        "tempo_preparo": 15,
+        "opcoes": {
+          "quantidade": {
+            "titulo": "Quantidade de Coxinhas",
+            "tipo": "numero",
+            "min": 5,
+            "max": 20,
+            "preco_por_unidade": 2.50,
+            "padrao": 10
+          }
+        }
+      },
+      {
+        "id": 2,
+        "nome": "Porção de Mini Pastéis",
+        "descricao": "Pastéis fritos crocantes diversos sabores",
+        "preco": 22.90,
+        "imagem": "https://alloydeliveryimages.s3.sa-east-1.amazonaws.com/item_images/7290/64ceb6eff18b7tai43.webp",
+        "categoria": "porcoes",
+        "promocao": false,
+        "personalizavel": true,
+        "disponivel": true,
+        "avaliacao": 4.6,
+        "tempo_preparo": 12,
+        "opcoes": {
+          "quantidade": {
+            "titulo": "Quantidade de Pastéis",
+            "tipo": "numero",
+            "min": 6,
+            "max": 24,
+            "preco_por_unidade": 2.00,
+            "padrao": 12
+          },
+          "sabores": {
+            "titulo": "Escolha os Sabores",
+            "tipo": "multipla_escolha",
+            "opcoes": [
+              {"nome": "Carne", "preco_extra": 0},
+              {"nome": "Queijo", "preco_extra": 0},
+              {"nome": "Pizza", "preco_extra": 1.00},
+              {"nome": "Camarao", "preco_extra": 2.00}
+            ],
+            "max_escolhas": 4
+          }
+        }
+      },
+      {
+        "id": 3,
+        "nome": "Porção de Batata Frita",
+        "descricao": "Batata frita crocante temperada com ervas",
+        "preco": 18.90,
+        "preco_promocional": 16.90,
+        "imagem": "https://alloydeliveryimages.s3.sa-east-1.amazonaws.com/item_images/11285/65e2252699539o0miu.webp",
+        "categoria": "porcoes",
+        "promocao": true,
+        "personalizavel": false,
+        "disponivel": true,
+        "avaliacao": 4.7,
+        "tempo_preparo": 10,
+        "tags": ["mais_pedidos", "promocao"]
+      },
+      {
+        "id": 4,
+        "nome": "Porção de Carne de Sol",
+        "descricao": "Carne de sol com cebola e pimentão",
+        "preco": 42.90,
+        "imagem": "https://conteudo.imguol.com.br/c/entretenimento/fc/2020/07/16/carne-de-sol-com-pirao-de-leite-1594916157682_v2_615x300.jpg",
+        "categoria": "porcoes",
+        "promocao": false,
+        "personalizavel": false,
+        "disponivel": true,
+        "avaliacao": 4.9,
+        "tempo_preparo": 20,
+        "tags": ["destaque"]
+      },
+      {
+        "id": 5,
+        "nome": "Carne de Sol com Batata",
+        "descricao": "Carne de sol acompanhada de batata frita",
+        "preco": 48.90,
+        "preco_promocional": 44.90,
+        "imagem": "https://edburgpizzaria.lojazap.com/_core/_uploads//2023/08/1426030823ggiicc8kab.webp",
+        "categoria": "porcoes",
+        "promocao": true,
+        "personalizavel": false,
+        "disponivel": true,
+        "avaliacao": 4.8,
+        "tempo_preparo": 18,
+        "tags": ["promocao", "combo_natural"]
+      },
+      {
+        "id": 6,
+        "nome": "Feijoada Completa (FDS)",
+        "descricao": "Feijoada completa para 1 pessoa - Disponível apenas Sábado e Domingo",
+        "preco": 35.90,
+        "imagem": "https://sabores-new.s3.amazonaws.com/public/2024/11/feijoada_1.jpg",
+        "categoria": "porcoes",
+        "promocao": false,
+        "personalizavel": true,
+        "disponivel": false,
+        "disponivel_fds": true,
+        "avaliacao": 4.9,
+        "tempo_preparo": 25,
+        "tags": ["especial", "fim_de_semana"],
+        "opcoes": {
+          "quantidade_pessoas": {
+            "titulo": "Serve quantas pessoas?",
+            "tipo": "numero",
+            "min": 1,
+            "max": 4,
+            "preco_por_pessoa": 35.90,
+            "padrao": 1
+          }
+        }
+      }
+    ],
+    "combos": [
+      {
+        "id": 7,
+        "nome": "Combo Carnívoro",
+        "descricao": "Carne de Sol + Batata Frita + 2 Coxinhas",
+        "preco": 65.90,
+        "preco_promocional": 59.90,
+        "imagem": "https://cdnjmn.arede.info/img/normal/180000/normal_00181275_00.jpg?xid=561176",
+        "categoria": "combos",
+        "promocao": true,
+        "personalizavel": false,
+        "disponivel": true,
+        "avaliacao": 4.8,
+        "tempo_preparo": 20,
+        "tags": ["combo", "promocao", "mais_pedidos"],
+        "itens_inclusos": [
+          "Porção de Carne de Sol",
+          "Porção de Batata Frita",
+          "2 Coxinhas"
+        ]
+      },
+      {
+        "id": 8,
+        "nome": "Combo Petiscos",
+        "descricao": "10 Coxinhas + 12 Mini Pastéis + Batata Frita",
+        "preco": 55.90,
+        "imagem": "https://cdnjmn.arede.info/img/normal/180000/normal_00181275_00.jpg?xid=561176",
+        "categoria": "combos",
+        "promocao": false,
+        "personalizavel": true,
+        "disponivel": true,
+        "avaliacao": 4.7,
+        "tempo_preparo": 15,
+        "tags": ["combo", "variado"],
+        "itens_inclusos": [
+          "10 Coxinhas",
+          "12 Mini Pastéis",
+          "Porção de Batata Frita"
+        ],
+        "opcoes": {
+          "coxinhas": {
+            "titulo": "Quantidade de Coxinhas",
+            "tipo": "numero",
+            "min": 5,
+            "max": 20,
+            "preco_por_unidade": 2.00,
+            "padrao": 10
+          },
+          "pasteis": {
+            "titulo": "Quantidade de Pastéis",
+            "tipo": "numero",
+            "min": 6,
+            "max": 24,
+            "preco_por_unidade": 1.50,
+            "padrao": 12
+          }
+        }
+      },
+      {
+        "id": 9,
+        "nome": "Combo Família",
+        "descricao": "Ideal para 4 pessoas - Variedade de petiscos",
+        "preco": 89.90,
+        "preco_promocional": 79.90,
+        "imagem": "https://cdnjmn.arede.info/img/normal/180000/normal_00181275_00.jpg?xid=561176",
+        "categoria": "combos",
+        "promocao": true,
+        "personalizavel": false,
+        "disponivel": true,
+        "avaliacao": 4.9,
+        "tempo_preparo": 25,
+        "tags": ["combo", "promocao", "familia"],
+        "itens_inclusos": [
+          "Carne de Sol com Batata",
+          "20 Coxinhas",
+          "16 Mini Pastéis",
+          "2 Refrigerantes 1L"
+        ]
+      }
+    ],
+    "bebidas": [
+      {
+        "id": 10,
+        "nome": "Guaraná Antarctica Lata",
+        "descricao": "Lata 350ml",
+        "preco": 6.90,
+        "imagem": "https://drogal.vtexassets.com/arquivos/ids/168869/25667.png?v=638386905234630000",
+        "categoria": "bebidas",
+        "promocao": false,
+        "personalizavel": false,
+        "disponivel": true,
+        "avaliacao": 4.5,
+        "tempo_preparo": 1,
+        "tags": ["refrigerante", "lata"]
+      },
+      {
+        "id": 11,
+        "nome": "Guaraná Antarctica 1L",
+        "descricao": "Garrafa 1 litro",
+        "preco": 10.90,
+        "preco_promocional": 9.90,
+        "imagem": "https://drogal.vtexassets.com/arquivos/ids/168869/25667.png?v=638386905234630000",
+        "categoria": "bebidas",
+        "promocao": true,
+        "personalizavel": false,
+        "disponivel": true,
+        "avaliacao": 4.6,
+        "tempo_preparo": 1,
+        "tags": ["refrigerante", "garrafa", "promocao"]
+      },
+      {
+        "id": 12,
+        "nome": "Coca-Cola Lata",
+        "descricao": "Lata 350ml",
+        "preco": 6.90,
+        "imagem": "https://cdn.awsli.com.br/2500x2500/1957/1957771/produto/104769747/refrigerante-coca-cola-lata-350ml-santa-cruz-doces2-i9d9ig27v5.png",
+        "categoria": "bebidas",
+        "promocao": false,
+        "personalizavel": false,
+        "disponivel": true,
+        "avaliacao": 4.5,
+        "tempo_preparo": 1,
+        "tags": ["refrigerante", "lata"]
+      },
+      {
+        "id": 13,
+        "nome": "Coca-Cola 1L",
+        "descricao": "Garrafa 1 litro",
+        "preco": 10.90,
+        "imagem": "https://cdn.awsli.com.br/2500x2500/1957/1957771/produto/104769747/refrigerante-coca-cola-lata-350ml-santa-cruz-doces2-i9d9ig27v5.png",
+        "categoria": "bebidas",
+        "promocao": false,
+        "personalizavel": false,
+        "disponivel": true,
+        "avaliacao": 4.6,
+        "tempo_preparo": 1,
+        "tags": ["refrigerante", "garrafa"]
+      },
+      {
+        "id": 14,
+        "nome": "Pepsi Lata",
+        "descricao": "Lata 350ml",
+        "preco": 5.90,
+        "preco_promocional": 5.50,
+        "imagem": "https://cdn.awsli.com.br/600x450/298/298064/produto/58265139/a70056cafc.jpg",
+        "categoria": "bebidas",
+        "promocao": true,
+        "personalizavel": false,
+        "disponivel": true,
+        "avaliacao": 4.4,
+        "tempo_preparo": 1,
+        "tags": ["refrigerante", "lata", "promocao"]
+      },
+      {
+        "id": 15,
+        "nome": "Pepsi 1L",
+        "descricao": "Garrafa 1 litro",
+        "preco": 9.90,
+        "imagem": "https://cdn.awsli.com.br/600x450/298/298064/produto/58265139/a70056cafc.jpg",
+        "categoria": "bebidas",
+        "promocao": false,
+        "personalizavel": false,
+        "disponivel": true,
+        "avaliacao": 4.5,
+        "tempo_preparo": 1,
+        "tags": ["refrigerante", "garrafa"]
+      },
+      {
+        "id": 16,
+        "nome": "Água Mineral 500ml",
+        "descricao": "Garrafa 500ml com ou sem gás",
+        "preco": 4.50,
+        "imagem": "https://cdn.awsli.com.br/600x450/298/298064/produto/58265139/a70056cafc.jpg",
+        "categoria": "bebidas",
+        "promocao": false,
+        "personalizavel": true,
+        "disponivel": true,
+        "avaliacao": 4.3,
+        "tempo_preparo": 1,
+        "opcoes": {
+          "tipo": {
+            "titulo": "Tipo de Água",
+            "tipo": "escolha_unica",
+            "opcoes": [
+              {"nome": "Sem Gás", "preco_extra": 0},
+              {"nome": "Com Gás", "preco_extra": 0.50}
+            ]
+          }
+        }
+      }
+    ]
+  },
+  "pedidos": [
+    {
+      "id": "RS12345",
+      "user_id": 1,
+      "status": "entregue",
+      "data": "2024-01-15T19:30:00",
+      "tipo_entrega": "delivery",
+      "total": 70.80,
+      "endereco_entrega": {
+        "rua": "Rua das Flores, 123",
+        "bairro": "Jardim Paulista",
+        "cidade": "São Paulo - SP",
+        "complemento": "Ap 42"
+      },
+      "items": [
+        {
+          "produto_id": 4,
+          "nome": "Porção de Carne de Sol",
+          "preco": 42.90,
+          "quantidade": 1,
+          "personalizacoes": null
+        },
+        {
+          "produto_id": 3,
+          "nome": "Porção de Batata Frita",
+          "preco": 18.90,
+          "quantidade": 1,
+          "personalizacoes": null
+        },
+        {
+          "produto_id": 99,
+          "nome": "Taxa de Entrega",
+          "preco": 5.00,
+          "quantidade": 1,
+          "personalizacoes": null
+        }
+      ],
+      "pagamento": {
+        "metodo": "cartao",
+        "status": "aprovado",
+        "valor_pago": 70.80
+      },
+      "avaliacao": {
+        "nota": 5,
+        "comentario": "Os petiscos são incríveis! A costela na brasa é a melhor que já comi. Entrega super rápida."
+      }
+    },
+    {
+      "id": "RS12344",
+      "user_id": 1,
+      "status": "preparando",
+      "data": "2024-01-14T20:15:00",
+      "tipo_entrega": "delivery",
+      "total": 73.40,
+      "endereco_entrega": {
+        "rua": "Rua das Flores, 123",
+        "bairro": "Jardim Paulista",
+        "cidade": "São Paulo - SP",
+        "complemento": "Ap 42"
+      },
+      "items": [
+        {
+          "produto_id": 7,
+          "nome": "Combo Carnívoro",
+          "preco": 65.90,
+          "quantidade": 1,
+          "personalizacoes": null
+        },
+        {
+          "produto_id": 10,
+          "nome": "Guaraná Antarctica Lata",
+          "preco": 6.90,
+          "quantidade": 1,
+          "personalizacoes": null
+        },
+        {
+          "produto_id": 99,
+          "nome": "Taxa de Entrega",
+          "preco": 5.00,
+          "quantidade": 1,
+          "personalizacoes": null
+        }
+      ],
+      "pagamento": {
+        "metodo": "dinheiro",
+        "status": "pendente",
+        "valor_pago": 0
+      },
+      "avaliacao": null
+    },
+    {
+      "id": "RS12343",
+      "user_id": 1,
+      "status": "pendente",
+      "data": "2024-01-13T18:45:00",
+      "tipo_entrega": "retirada",
+      "total": 44.80,
+      "endereco_entrega": null,
+      "items": [
+        {
+          "produto_id": 1,
+          "nome": "Porção de Coxinhas (15 unidades)",
+          "preco": 37.50,
+          "quantidade": 1,
+          "personalizacoes": {
+            "quantidade": 15
+          }
+        },
+        {
+          "produto_id": 14,
+          "nome": "Pepsi Lata",
+          "preco": 5.90,
+          "quantidade": 1,
+          "personalizacoes": null
+        }
+      ],
+      "pagamento": {
+        "metodo": "pix",
+        "status": "aprovado",
+        "valor_pago": 44.80
+      },
+      "avaliacao": null
+    }
+  ],
+  "categorias": [
+    {
+      "id": "porcoes",
+      "nome": "Porções",
+      "icone": "fas fa-drumstick-bite",
+      "ordem": 1
+    },
+    {
+      "id": "combos",
+      "nome": "Combos",
+      "icone": "fas fa-gift",
+      "ordem": 2
+    },
+    {
+      "id": "bebidas",
+      "nome": "Bebidas",
+      "icone": "fas fa-beer",
+      "ordem": 3
+    }
+  ],
+  "promocoes": [
+    {
+      "id": 1,
+      "titulo": "Promoção do Dia",
+      "descricao": "Descontos especais nos produtos em destaque",
+      "produtos": [1, 3, 5, 7, 9, 11, 14],
+      "validade": "2024-01-31",
+      "ativa": true
+    },
+    {
+      "id": 2,
+      "titulo": "Combo Família",
+      "descricao": "Ideal para reunir a família toda",
+      "produtos": [9],
+      "validade": "2024-02-15",
+      "ativa": true
+    }
+  ],
+  "avaliacoes": [
+    {
+      "id": 1,
+      "user_nome": "Maria Silva",
+      "rating": 5,
+      "comentario": "Os petiscos são incríveis! A costela na brasa é a melhor que já comi. Entrega super rápida.",
+      "data": "2024-01-10",
+      "pedido_id": "RS12340"
+    },
+    {
+      "id": 2,
+      "user_nome": "João Santos",
+      "rating": 5,
+      "comentario": "Sempre peço a batata frita especial. É viciante! Recomendo muito.",
+      "data": "2024-01-08",
+      "pedido_id": "RS12338"
+    },
+    {
+      "id": 3,
+      "user_nome": "Ana Oliveira",
+      "rating": 4,
+      "comentario": "Adorei as coxinhas, muito crocantes e saborosas. Só achei o tempo de entrega um pouco longo.",
+      "data": "2024-01-05",
+      "pedido_id": "RS12335"
+    }
+  ]
+}
