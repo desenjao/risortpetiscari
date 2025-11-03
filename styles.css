@@ -887,3 +887,178 @@ header {
 .empty-state p {
   font-size: 14px;
 }
+
+/* Responsive Design */
+@media (max-width: 480px) {
+  .container {
+    max-width: 100%;
+    padding-bottom: 70px;
+  }
+  
+  .products-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 12px;
+  }
+  
+  .product-image {
+    height: 120px;
+  }
+  
+  .product-info {
+    padding: 12px;
+  }
+  
+  .product-title {
+    font-size: 14px;
+  }
+  
+  .product-price {
+    font-size: 18px;
+  }
+  
+  .add-to-cart {
+    padding: 10px;
+    font-size: 13px;
+  }
+  
+  .promo-banner {
+    padding: 20px;
+    margin-bottom: 20px;
+  }
+  
+  .promo-content h2 {
+    font-size: 20px;
+  }
+  
+  .section-title {
+    font-size: 18px;
+  }
+  
+  .category {
+    min-width: 85px;
+    padding: 12px 15px;
+  }
+  
+  .category i {
+    font-size: 20px;
+  }
+  
+  .category span {
+    font-size: 12px;
+  }
+  
+  .bottom-nav {
+    padding: 10px 0;
+  }
+  
+  .nav-item {
+    padding: 6px 15px;
+  }
+  
+  .nav-item i {
+    font-size: 20px;
+  }
+  
+  .nav-item span {
+    font-size: 11px;
+  }
+  
+  .floating-cart-btn {
+    width: 50px;
+    height: 50px;
+    bottom: 70px;
+    right: 15px;
+  }
+  
+  .floating-cart-btn i {
+    font-size: 20px;
+  }
+}
+
+@media (min-width: 768px) {
+  .container {
+    max-width: 400px;
+  }
+}
+
+@media (min-width: 1024px) {
+  .container {
+    max-width: 450px;
+  }
+  
+  .products-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 20px;
+  }
+  
+  .product-image {
+    height: 160px;
+  }
+  
+  .product-title {
+    font-size: 16px;
+  }
+  
+  .product-price {
+    font-size: 22px;
+  }
+  
+  .promo-content h2 {
+    font-size: 26px;
+  }
+}
+
+@media (min-width: 1200px) {
+  .container {
+    max-width: 500px;
+  }
+}
+
+/* Ajustes para telas muito pequenas (iPhone SE etc) */
+@media (max-width: 360px) {
+  .products-grid {
+    grid-template-columns: 1fr;
+    gap: 10px;
+  }
+  
+  .category {
+    min-width: 75px;
+    padding: 10px 12px;
+  }
+  
+  .category i {
+    font-size: 18px;
+  }
+  
+  .screen {
+    padding: 15px;
+    padding-bottom: 80px;
+  }
+  
+  header {
+    padding: 12px 15px;
+  }
+  
+  .logo h1 {
+    font-size: 20px;
+  }
+}
+
+/* Ajustes de orientação landscape para mobile */
+@media (max-height: 500px) and (orientation: landscape) {
+  .container {
+    padding-bottom: 60px;
+  }
+  
+  .bottom-nav {
+    padding: 8px 0;
+  }
+  
+  .nav-item span {
+    display: none;
+  }
+  
+  .floating-cart-btn {
+    bottom: 50px;
+  }
+}
