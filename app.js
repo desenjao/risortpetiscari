@@ -699,53 +699,65 @@ function animateProcessingItems() {
   })
 }
 
-/// Send WhatsApp Order
+// Enviar pedido via WhatsApp
 function sendWhatsAppOrder() {
-  const total = calculateTotal()
-  const config = appData?.config || {}
-  const user = appData?.user || {}
-  const phoneNumber = config.telefone_whatsapp || "+5511999999999"
-  const formattedPhone = phoneNumber.replace(/\D/g, "")
+  const total = calculateTotal();
+  const config = appData?.config || {};
+  const user = appData?.user || {};
+  const phoneNumber = config.telefone_whatsapp || "+5589981016164";
+  const formattedPhone = phoneNumber.replace(/\D/g, "");
 
-  let message = `🛒 *PEDIDO - ${config.nome_estabelecimento || "Risorte PETISCARIA"}* 🛒\n\n`
-  message += `👤 *Cliente:* ${user.nome || "Cliente"}\n`
+  let message = `🛍️ *PEDIDO - ${config.nome_estabelecimento || "Risorte Petiscaria"}*\n\n`;
+  message += `👤 *Cliente:* ${user.nome || "Cliente"}\n`;
 
   if (isDelivery && user.endereco) {
-    const end = user.endereco
-    message += `📍 *Endereço:* ${end.rua}, ${end.bairro}, ${end.cidade}${end.complemento ? ` - ${end.complemento}` : ""}\n`
+    const end = user.endereco;
+    message += `📍 *Endereço:* ${end.rua}, ${end.bairro}, ${end.cidade}`;
+    if (end.complemento) message += ` - ${end.complemento}`;
+    message += `\n`;
   }
 
-  message += `🚚 *Tipo:* ${isDelivery ? "Delivery" : "Retirada no Local"}\n\n`
-  message += `📋 *ITENS DO PEDIDO:*\n`
-  message += `────────────────────\n`
+  message += `🚗 *Tipo:* ${isDelivery ? "Delivery" : "Retirada no Local"}\n\n`;
+  message += `🧾 *ITENS DO PEDIDO:*\n`;
+  message += `────────────────────\n`;
 
   cart.forEach((item) => {
-    message += `• ${item.quantity}x ${item.title}\n`
-    message += `  R$ ${(item.price * item.quantity).toFixed(2).replace(".", ",")}\n`
-  })
+    message += `• ${item.quantity}x ${item.title}\n`;
+    message += `  💲 R$ ${(item.price * item.quantity)
+      .toFixed(2)
+      .replace(".", ",")}\n`;
+  });
 
-  message += `────────────────────\n`
+  message += `────────────────────\n`;
 
   if (isDelivery) {
-    const taxa = config.taxa_entrega || 5.0
-    message += `📦 Taxa de Entrega: R$ ${taxa.toFixed(2).replace(".", ",")}\n`
+    const taxa = config.taxa_entrega || 5.0;
+    message += `📦 *Taxa de Entrega:* R$ ${taxa
+      .toFixed(2)
+      .replace(".", ",")}\n`;
   }
 
-  message += `\n💰 *TOTAL: R$ ${total.toFixed(2).replace(".", ",")}*\n\n`
-  message += `💳 *Forma de Pagamento:* A combinar\n`
+  message += `\n💰 *TOTAL:* R$ ${total.toFixed(2).replace(".", ",")}\n\n`;
+  message += `💳 *Forma de Pagamento:* A combinar\n`;
 
-  const tempoMin = isDelivery ? config.tempo_entrega_min : config.tempo_retirada_min
-  const tempoMax = isDelivery ? config.tempo_entrega_max : config.tempo_retirada_max
-  message += `⏰ *Previsão:* ${tempoMin || 30}-${tempoMax || 45} minutos\n\n`
-  message += `_Pedido gerado via App Risorte Petiscaria_ 📱`
+  const tempoMin = isDelivery
+    ? config.tempo_entrega_min
+    : config.tempo_retirada_min;
+  const tempoMax = isDelivery
+    ? config.tempo_entrega_max
+    : config.tempo_retirada_max;
 
-  const encodedMessage = encodeURIComponent(message)
-  const whatsappURL = `https://wa.me/${formattedPhone}?text=${encodedMessage}`
+  message += `⏰ *Previsão:* ${tempoMin || 30}–${tempoMax || 45} minutos\n\n`;
+  message += `_Pedido gerado via App Risorte Petiscaria_ 📱`;
 
-  window.open(whatsappURL, "_blank")
+  // encodeURI mantém emojis e acentos corretamente
+  const encodedMessage = encodeURI(message);
+  const whatsappURL = `https://wa.me/${formattedPhone}?text=${encodedMessage}`;
 
-  showSuccessMessage()
+  window.open(whatsappURL, "_blank");
+  showSuccessMessage();
 }
+
 // Show Success Message
 function showSuccessMessage() {
   const feedback = document.createElement("div")
