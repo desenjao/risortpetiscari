@@ -25,6 +25,8 @@ const userName = document.getElementById("userName")
 const userEmail = document.getElementById("userEmail")
 const userPhone = document.getElementById("userPhone")
 const userAddress = document.getElementById("userAddress")
+const editProfileBtn = document.getElementById("editProfileBtn")
+const deleteProfileBtn = document.getElementById("deleteProfileBtn")
 
 // Initialize App
 document.addEventListener("DOMContentLoaded", initApp)
@@ -40,10 +42,10 @@ async function initApp() {
     // Load products
     loadProducts()
 
-    // Load user profile
+    // Load user profile from localStorage
     loadUserProfile()
 
-    // Load orders
+    // Load orders from JSON
     loadOrders()
 
     // Hide loading screen
@@ -113,6 +115,9 @@ function setupEventListeners() {
 
   // Checkout
   checkoutBtn.addEventListener("click", handleCheckout)
+
+  editProfileBtn.addEventListener("click", showEditProfileModal)
+  deleteProfileBtn.addEventListener("click", deleteUserProfile)
 }
 
 // Show Screen
@@ -130,6 +135,14 @@ function showScreen(screenId) {
       item.classList.add("active")
     }
   })
+
+  if (screenId === "ordersScreen") {
+    loadOrders()
+  }
+
+  if (screenId === "profileScreen") {
+    loadUserProfile()
+  }
 }
 
 // Load Products
@@ -406,7 +419,265 @@ function handleCheckout() {
     return
   }
 
+  // Validar se o usuário tem perfil completo
+  if (!validateUserProfile()) {
+    showProfileRequiredModal()
+    return
+  }
+
   showOrderConfirmationModal()
+}
+
+// Validate User Profile
+function validateUserProfile() {
+  const user = getUserFromLocalStorage()
+
+  // Verificar se tem nome, telefone e endereço completo
+  if (!user.nome || user.nome.trim() === "") {
+    return false
+  }
+
+  if (!user.telefone || user.telefone.trim() === "") {
+    return false
+  }
+
+  // Se for delivery, validar endereço
+  if (isDelivery) {
+    if (
+      !user.endereco ||
+      !user.endereco.rua ||
+      user.endereco.rua.trim() === "" ||
+      !user.endereco.bairro ||
+      user.endereco.bairro.trim() === "" ||
+      !user.endereco.cidade ||
+      user.endereco.cidade.trim() === ""
+    ) {
+      return false
+    }
+  }
+
+  return true
+}
+
+// Show Profile Required Modal
+function showProfileRequiredModal() {
+  cartPanel.classList.remove("active")
+
+  const user = getUserFromLocalStorage()
+
+  const modal = document.createElement("div")
+  modal.style.cssText = `
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.9);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        z-index: 10000;
+        backdrop-filter: blur(5px);
+        animation: fadeIn 0.3s ease-out;
+    `
+
+  modal.innerHTML = `
+        <div style="
+            background: white;
+            border-radius: 20px;
+            padding: 30px;
+            width: 90%;
+            max-width: 500px;
+            max-height: 85vh;
+            overflow-y: auto;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.3);
+            animation: slideUp 0.4s ease-out;
+        ">
+            <div style="text-align: center; margin-bottom: 25px;">
+                <div style="
+                    width: 70px;
+                    height: 70px;
+                    background: linear-gradient(135deg, #FF6B6B, #FFB300);
+                    border-radius: 50%;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    margin: 0 auto 15px;
+                    animation: pulse 2s infinite;
+                ">
+                    <i class="fas fa-exclamation-triangle" style="color: white; font-size: 30px;"></i>
+                </div>
+                <h3 style="margin: 0 0 8px 0; color: #2C3E50; font-weight: 700; font-size: 22px;">Cadastro Necessário</h3>
+                <p style="margin: 0; color: #717171; font-size: 14px;">Precisamos de suas informações para finalizar o pedido</p>
+            </div>
+            
+            <div style="
+                background: #FFF3CD;
+                border-left: 4px solid #FFB300;
+                padding: 12px 15px;
+                border-radius: 8px;
+                margin-bottom: 20px;
+            ">
+                <p style="margin: 0; color: #856404; font-size: 13px; line-height: 1.5;">
+                    <i class="fas fa-info-circle"></i> Para enviar seu pedido via WhatsApp, precisamos do seu nome, telefone e endereço de entrega.
+                </p>
+            </div>
+            
+            <form id="requiredProfileForm" style="display: flex; flex-direction: column; gap: 15px;">
+                <div>
+                    <label style="display: block; margin-bottom: 5px; color: #2C3E50; font-weight: 600; font-size: 14px;">
+                        <i class="fas fa-user"></i> Nome Completo <span style="color: #EA1D2C;">*</span>
+                    </label>
+                    <input type="text" id="reqNome" value="${user.nome || ""}" placeholder="Seu nome completo" 
+                        style="width: 100%; padding: 12px; border: 2px solid #E0E0E0; border-radius: 10px; font-size: 14px; box-sizing: border-box;" required>
+                </div>
+                
+                <div>
+                    <label style="display: block; margin-bottom: 5px; color: #2C3E50; font-weight: 600; font-size: 14px;">
+                        <i class="fas fa-phone"></i> Telefone <span style="color: #EA1D2C;">*</span>
+                    </label>
+                    <input type="tel" id="reqTelefone" value="${user.telefone || ""}" placeholder="(00) 00000-0000" 
+                        style="width: 100%; padding: 12px; border: 2px solid #E0E0E0; border-radius: 10px; font-size: 14px; box-sizing: border-box;" required>
+                </div>
+                
+                <div>
+                    <label style="display: block; margin-bottom: 5px; color: #2C3E50; font-weight: 600; font-size: 14px;">
+                        <i class="fas fa-envelope"></i> E-mail (opcional)
+                    </label>
+                    <input type="email" id="reqEmail" value="${user.email || ""}" placeholder="seu@email.com" 
+                        style="width: 100%; padding: 12px; border: 2px solid #E0E0E0; border-radius: 10px; font-size: 14px; box-sizing: border-box;">
+                </div>
+                
+                ${
+                  isDelivery
+                    ? `
+                <div style="border-top: 2px solid #F0F0F0; padding-top: 15px; margin-top: 10px;">
+                    <h4 style="margin: 0 0 15px 0; color: #2C3E50; font-size: 16px;">
+                        <i class="fas fa-map-marker-alt"></i> Endereço de Entrega <span style="color: #EA1D2C;">*</span>
+                    </h4>
+                    
+                    <div style="display: flex; flex-direction: column; gap: 12px;">
+                        <input type="text" id="reqRua" value="${user.endereco?.rua || ""}" placeholder="Rua e número *" 
+                            style="width: 100%; padding: 12px; border: 2px solid #E0E0E0; border-radius: 10px; font-size: 14px; box-sizing: border-box;" required>
+                        
+                        <input type="text" id="reqBairro" value="${user.endereco?.bairro || ""}" placeholder="Bairro *" 
+                            style="width: 100%; padding: 12px; border: 2px solid #E0E0E0; border-radius: 10px; font-size: 14px; box-sizing: border-box;" required>
+                        
+                        <input type="text" id="reqCidade" value="${user.endereco?.cidade || ""}" placeholder="Cidade - UF *" 
+                            style="width: 100%; padding: 12px; border: 2px solid #E0E0E0; border-radius: 10px; font-size: 14px; box-sizing: border-box;" required>
+                        
+                        <input type="text" id="reqComplemento" value="${user.endereco?.complemento || ""}" placeholder="Complemento (opcional)" 
+                            style="width: 100%; padding: 12px; border: 2px solid #E0E0E0; border-radius: 10px; font-size: 14px; box-sizing: border-box;">
+                    </div>
+                </div>
+                `
+                    : ""
+                }
+                
+                <div style="display: flex; gap: 10px; margin-top: 10px;">
+                    <button type="button" id="cancelRequiredBtn" style="
+                        flex: 1;
+                        padding: 15px;
+                        border: 2px solid #717171;
+                        background: white;
+                        color: #717171;
+                        border-radius: 10px;
+                        font-weight: 600;
+                        cursor: pointer;
+                        transition: all 0.3s;
+                        font-size: 15px;
+                    ">Cancelar</button>
+                    <button type="submit" style="
+                        flex: 2;
+                        padding: 15px;
+                        border: none;
+                        background: linear-gradient(135deg, #00C851, #00A040);
+                        color: white;
+                        border-radius: 10px;
+                        font-weight: 700;
+                        cursor: pointer;
+                        transition: all 0.3s;
+                        box-shadow: 0 4px 15px rgba(0, 200, 81, 0.3);
+                        font-size: 15px;
+                    ">✓ Salvar e Continuar</button>
+                </div>
+            </form>
+        </div>
+    `
+
+  document.body.appendChild(modal)
+
+  // Event listeners
+  modal.querySelector("#cancelRequiredBtn").addEventListener("click", () => {
+    document.body.removeChild(modal)
+    cartPanel.classList.add("active")
+  })
+
+  modal.querySelector("#requiredProfileForm").addEventListener("submit", (e) => {
+    e.preventDefault()
+
+    const newUser = {
+      nome: document.getElementById("reqNome").value.trim(),
+      telefone: document.getElementById("reqTelefone").value.trim(),
+      email: document.getElementById("reqEmail").value.trim(),
+      endereco: isDelivery
+        ? {
+            rua: document.getElementById("reqRua").value.trim(),
+            bairro: document.getElementById("reqBairro").value.trim(),
+            cidade: document.getElementById("reqCidade").value.trim(),
+            complemento: document.getElementById("reqComplemento").value.trim(),
+          }
+        : user.endereco || {},
+    }
+
+    // Validar campos obrigatórios
+    if (!newUser.nome || !newUser.telefone) {
+      showFeedback("❌ Preencha todos os campos obrigatórios!")
+      return
+    }
+
+    if (isDelivery && (!newUser.endereco.rua || !newUser.endereco.bairro || !newUser.endereco.cidade)) {
+      showFeedback("❌ Preencha o endereço completo para entrega!")
+      return
+    }
+
+    // Salvar no localStorage
+    localStorage.setItem("risorte_user", JSON.stringify(newUser))
+
+    // Mostrar feedback de sucesso
+    document.body.removeChild(modal)
+
+    const successFeedback = document.createElement("div")
+    successFeedback.style.cssText = `
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        background: linear-gradient(135deg, #00C851, #00A040);
+        color: white;
+        padding: 25px 35px;
+        border-radius: 15px;
+        box-shadow: 0 10px 40px rgba(0,0,0,0.3);
+        z-index: 10001;
+        font-weight: 600;
+        text-align: center;
+        animation: slideUp 0.5s ease-out;
+    `
+    successFeedback.innerHTML = `
+        <div style="font-size: 40px; margin-bottom: 10px;">✓</div>
+        <div style="font-size: 16px; margin-bottom: 5px;">Perfil Cadastrado!</div>
+        <div style="font-size: 13px; opacity: 0.9;">Continuando com seu pedido...</div>
+    `
+
+    document.body.appendChild(successFeedback)
+
+    setTimeout(() => {
+      document.body.removeChild(successFeedback)
+      loadUserProfile()
+      // Continuar com o fluxo normal de checkout
+      showOrderConfirmationModal()
+    }, 2000)
+  })
 }
 
 // Show Order Confirmation Modal
@@ -698,65 +969,56 @@ function animateProcessingItems() {
     }, index * 600)
   })
 }
-app.use((req, res, next) => {
-  res.setHeader("Content-Type", "application/javascript; charset=utf-8");
-  next();
-});
 
-// Enviar pedido via WhatsApp (versão sem emojis)
+// Enviar pedido via WhatsApp
 function sendWhatsAppOrder() {
-  const total = calculateTotal();
-  const config = appData?.config || {};
-  const user = appData?.user || {};
-  const phoneNumber = config.telefone_whatsapp || "+5511999999999";
-  const formattedPhone = phoneNumber.replace(/\D/g, "");
+  const total = calculateTotal()
+  const config = appData?.config || {}
+  const user = getUserFromLocalStorage()
+  const phoneNumber = config.telefone_whatsapp || "+5511999999999"
+  const formattedPhone = phoneNumber.replace(/\D/g, "")
 
-  let message = `*PEDIDO - ${config.nome_estabelecimento || "Risorte Petiscaria"}*\n\n`;
-  message += `*Cliente:* ${user.nome || "Cliente"}\n`;
+  let message = `*PEDIDO - ${config.nome_estabelecimento || "Risorte Petiscaria"}*\n\n`
+  message += `*Cliente:* ${user.nome || "Cliente"}\n`
 
   if (isDelivery && user.endereco) {
-    const end = user.endereco;
-    message += `*Endereço:* ${end.rua}, ${end.bairro}, ${end.cidade}`;
-    if (end.complemento) message += ` - ${end.complemento}`;
-    message += `\n`;
+    const end = user.endereco
+    message += `*Endereço:* ${end.rua}, ${end.bairro}, ${end.cidade}`
+    if (end.complemento) message += ` - ${end.complemento}`
+    message += `\n`
   }
 
-  message += `*Tipo:* ${isDelivery ? "Delivery" : "Retirada no Local"}\n\n`;
-  message += `*ITENS DO PEDIDO:*\n`;
-  message += `------------------------------\n`;
+  message += `*Tipo:* ${isDelivery ? "Delivery" : "Retirada no Local"}\n\n`
+  message += `*ITENS DO PEDIDO:*\n`
+  message += `------------------------------\n`
 
   cart.forEach((item) => {
-    message += `${item.quantity}x ${item.title}\n`;
-    message += `  R$ ${(item.price * item.quantity).toFixed(2).replace(".", ",")}\n`;
-  });
+    message += `${item.quantity}x ${item.title}\n`
+    message += `  R$ ${(item.price * item.quantity).toFixed(2).replace(".", ",")}\n`
+  })
 
-  message += `------------------------------\n`;
+  message += `------------------------------\n`
 
   if (isDelivery) {
-    const taxa = config.taxa_entrega || 5.0;
-    message += `Taxa de Entrega: R$ ${taxa.toFixed(2).replace(".", ",")}\n`;
+    const taxa = config.taxa_entrega || 5.0
+    message += `Taxa de Entrega: R$ ${taxa.toFixed(2).replace(".", ",")}\n`
   }
 
-  message += `\n*TOTAL:* R$ ${total.toFixed(2).replace(".", ",")}\n\n`;
-  message += `*Forma de Pagamento:* A combinar\n`;
+  message += `\n*TOTAL:* R$ ${total.toFixed(2).replace(".", ",")}\n\n`
+  message += `*Forma de Pagamento:* A combinar\n`
 
-  const tempoMin = isDelivery
-    ? config.tempo_entrega_min
-    : config.tempo_retirada_min;
-  const tempoMax = isDelivery
-    ? config.tempo_entrega_max
-    : config.tempo_retirada_max;
+  const tempoMin = isDelivery ? config.tempo_entrega_min : config.tempo_retirada_min
+  const tempoMax = isDelivery ? config.tempo_entrega_max : config.tempo_retirada_max
 
-  message += `*Previsão:* ${tempoMin || 30}-${tempoMax || 45} minutos\n\n`;
-  message += `_Pedido gerado via App Risorte Petiscaria_`;
+  message += `*Previsão:* ${tempoMin || 30}-${tempoMax || 45} minutos\n\n`
+  message += `_Pedido gerado via App Risorte Petiscaria_`
 
-  const encodedMessage = encodeURIComponent(message);
-  const whatsappURL = `https://wa.me/${formattedPhone}?text=${encodedMessage}`;
+  const encodedMessage = encodeURIComponent(message)
+  const whatsappURL = `https://wa.me/${formattedPhone}?text=${encodedMessage}`
 
-  window.open(whatsappURL, "_blank");
-  showSuccessMessage();
+  window.open(whatsappURL, "_blank")
+  showSuccessMessage()
 }
-
 
 // Show Success Message
 function showSuccessMessage() {
@@ -822,24 +1084,220 @@ function showFeedback(message) {
   }, 2000)
 }
 
-// Load User Profile
 function loadUserProfile() {
-  if (!appData || !appData.user) return
+  const user = getUserFromLocalStorage()
 
-  const user = appData.user
-  userName.textContent = user.nome || "Usuário"
-  userEmail.textContent = user.email || "email@exemplo.com"
+  userName.textContent = user.nome || "Visitante"
+  userEmail.textContent = user.email || "Adicione suas informações"
   userPhone.textContent = user.telefone || "Não informado"
 
-  if (user.endereco) {
+  if (user.endereco && user.endereco.rua) {
     const end = user.endereco
     userAddress.textContent = `${end.rua}, ${end.bairro}, ${end.cidade}`
+  } else {
+    userAddress.textContent = "Não informado"
   }
 }
 
-// Load Orders
+function getUserFromLocalStorage() {
+  const userStr = localStorage.getItem("risorte_user")
+  if (userStr) {
+    try {
+      return JSON.parse(userStr)
+    } catch (e) {
+      console.error("Erro ao ler perfil do localStorage:", e)
+      return {}
+    }
+  }
+  return {}
+}
+
+function saveUserToLocalStorage(user) {
+  localStorage.setItem("risorte_user", JSON.stringify(user))
+  loadUserProfile()
+  showFeedback("✓ Perfil salvo com sucesso!")
+}
+
+function showEditProfileModal() {
+  const user = getUserFromLocalStorage()
+
+  const modal = document.createElement("div")
+  modal.style.cssText = `
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.8);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        z-index: 10000;
+        backdrop-filter: blur(5px);
+        animation: fadeIn 0.3s ease-out;
+    `
+
+  modal.innerHTML = `
+        <div style="
+            background: white;
+            border-radius: 20px;
+            padding: 30px;
+            width: 90%;
+            max-width: 500px;
+            max-height: 80vh;
+            overflow-y: auto;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.3);
+            animation: slideUp 0.4s ease-out;
+        ">
+            <div style="text-align: center; margin-bottom: 25px;">
+                <div style="
+                    width: 60px;
+                    height: 60px;
+                    background: linear-gradient(135deg, #EA1D2C, #FFB300);
+                    border-radius: 50%;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    margin: 0 auto 15px;
+                ">
+                    <i class="fas fa-user-edit" style="color: white; font-size: 24px;"></i>
+                </div>
+                <h3 style="margin: 0 0 8px 0; color: #2C3E50; font-weight: 700; font-size: 22px;">Editar Perfil</h3>
+                <p style="margin: 0; color: #717171; font-size: 14px;">Atualize suas informações</p>
+            </div>
+            
+            <form id="profileForm" style="display: flex; flex-direction: column; gap: 15px;">
+                <div>
+                    <label style="display: block; margin-bottom: 5px; color: #2C3E50; font-weight: 600; font-size: 14px;">
+                        <i class="fas fa-user"></i> Nome Completo
+                    </label>
+                    <input type="text" id="inputNome" value="${user.nome || ""}" placeholder="Seu nome completo" 
+                        style="width: 100%; padding: 12px; border: 2px solid #E0E0E0; border-radius: 10px; font-size: 14px; box-sizing: border-box;" required>
+                </div>
+                
+                <div>
+                    <label style="display: block; margin-bottom: 5px; color: #2C3E50; font-weight: 600; font-size: 14px;">
+                        <i class="fas fa-envelope"></i> E-mail
+                    </label>
+                    <input type="email" id="inputEmail" value="${user.email || ""}" placeholder="seu@email.com" 
+                        style="width: 100%; padding: 12px; border: 2px solid #E0E0E0; border-radius: 10px; font-size: 14px; box-sizing: border-box;" required>
+                </div>
+                
+                <div>
+                    <label style="display: block; margin-bottom: 5px; color: #2C3E50; font-weight: 600; font-size: 14px;">
+                        <i class="fas fa-phone"></i> Telefone
+                    </label>
+                    <input type="tel" id="inputTelefone" value="${user.telefone || ""}" placeholder="(00) 00000-0000" 
+                        style="width: 100%; padding: 12px; border: 2px solid #E0E0E0; border-radius: 10px; font-size: 14px; box-sizing: border-box;" required>
+                </div>
+                
+                <div style="border-top: 2px solid #F0F0F0; padding-top: 15px; margin-top: 10px;">
+                    <h4 style="margin: 0 0 15px 0; color: #2C3E50; font-size: 16px;">
+                        <i class="fas fa-map-marker-alt"></i> Endereço de Entrega
+                    </h4>
+                    
+                    <div style="display: flex; flex-direction: column; gap: 12px;">
+                        <input type="text" id="inputRua" value="${user.endereco?.rua || ""}" placeholder="Rua e número" 
+                            style="width: 100%; padding: 12px; border: 2px solid #E0E0E0; border-radius: 10px; font-size: 14px; box-sizing: border-box;">
+                        
+                        <input type="text" id="inputBairro" value="${user.endereco?.bairro || ""}" placeholder="Bairro" 
+                            style="width: 100%; padding: 12px; border: 2px solid #E0E0E0; border-radius: 10px; font-size: 14px; box-sizing: border-box;">
+                        
+                        <input type="text" id="inputCidade" value="${user.endereco?.cidade || ""}" placeholder="Cidade - UF" 
+                            style="width: 100%; padding: 12px; border: 2px solid #E0E0E0; border-radius: 10px; font-size: 14px; box-sizing: border-box;">
+                        
+                        <input type="text" id="inputComplemento" value="${user.endereco?.complemento || ""}" placeholder="Complemento (opcional)" 
+                            style="width: 100%; padding: 12px; border: 2px solid #E0E0E0; border-radius: 10px; font-size: 14px; box-sizing: border-box;">
+                    </div>
+                </div>
+                
+                <div style="display: flex; gap: 10px; margin-top: 10px;">
+                    <button type="button" id="cancelProfileBtn" style="
+                        flex: 1;
+                        padding: 15px;
+                        border: 2px solid #717171;
+                        background: white;
+                        color: #717171;
+                        border-radius: 10px;
+                        font-weight: 600;
+                        cursor: pointer;
+                        transition: all 0.3s;
+                        font-size: 15px;
+                    ">Cancelar</button>
+                    <button type="submit" style="
+                        flex: 2;
+                        padding: 15px;
+                        border: none;
+                        background: linear-gradient(135deg, #EA1D2C, #FFB300);
+                        color: white;
+                        border-radius: 10px;
+                        font-weight: 700;
+                        cursor: pointer;
+                        transition: all 0.3s;
+                        box-shadow: 0 4px 15px rgba(234, 29, 44, 0.3);
+                        font-size: 15px;
+                    ">✓ Salvar Perfil</button>
+                </div>
+            </form>
+        </div>
+    `
+
+  document.body.appendChild(modal)
+
+  // Event listeners
+  modal.querySelector("#cancelProfileBtn").addEventListener("click", () => {
+    document.body.removeChild(modal)
+  })
+
+  modal.querySelector("#profileForm").addEventListener("submit", (e) => {
+    e.preventDefault()
+
+    const updatedUser = {
+      nome: document.getElementById("inputNome").value,
+      email: document.getElementById("inputEmail").value,
+      telefone: document.getElementById("inputTelefone").value,
+      endereco: {
+        rua: document.getElementById("inputRua").value,
+        bairro: document.getElementById("inputBairro").value,
+        cidade: document.getElementById("inputCidade").value,
+        complemento: document.getElementById("inputComplemento").value,
+      },
+    }
+
+    saveUserToLocalStorage(updatedUser)
+    document.body.removeChild(modal)
+  })
+
+  modal.addEventListener("click", (e) => {
+    if (e.target === modal) {
+      document.body.removeChild(modal)
+    }
+  })
+}
+
+function deleteUserProfile() {
+  const confirmDelete = confirm(
+    "Tem certeza que deseja excluir seu perfil?\n\nTodos os seus dados serão removidos permanentemente.",
+  )
+
+  if (confirmDelete) {
+    localStorage.removeItem("risorte_user")
+    loadUserProfile()
+    showFeedback("✓ Perfil excluído com sucesso!")
+  }
+}
+
 function loadOrders() {
-  if (!appData || !appData.pedidos) return
+  if (!appData || !appData.pedidos) {
+    ordersList.innerHTML = `
+            <div class="empty-state">
+                <i class="fas fa-receipt"></i>
+                <h3>Nenhum pedido ainda</h3>
+                <p>Faça seu primeiro pedido!</p>
+            </div>
+        `
+    return
+  }
 
   ordersList.innerHTML = ""
 
@@ -919,16 +1377,6 @@ function getDefaultData() {
       taxa_entrega: 5.0,
       tempo_entrega_min: 30,
       tempo_entrega_max: 45,
-    },
-    user: {
-      nome: "Cliente",
-      email: "cliente@email.com",
-      telefone: "+5511999999999",
-      endereco: {
-        rua: "Rua Exemplo, 123",
-        bairro: "Centro",
-        cidade: "São Paulo - SP",
-      },
     },
     produtos: {
       porcoes: [],
